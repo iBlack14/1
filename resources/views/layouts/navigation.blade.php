@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-gradient-to-r from-[#BF1F6A] via-[#8704BF] to-[#5F1BF2] rounded-b-[15px] shadow-lg border-b border-white/10 z-[100] relative">
+<nav x-data="{ open: false }" class="bg-vc-purple rounded-b-[15px] shadow-lg border-b border-white/10 z-[100] relative">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20"> <!-- Increased height for premium feel -->
@@ -8,7 +8,7 @@
                     <a href="{{ route('dashboard') }}">
                         <!-- White Logo -->
                         <!-- White Logo -->
-                        <x-application-logo class="block h-9 w-auto fill-current text-white" />
+                        <x-application-logo class="block h-16 w-auto" />
                     </a>
                 </div>
 

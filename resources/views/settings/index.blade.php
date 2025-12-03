@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-fuchsia-700 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Ajustes de Mensajes') }}
         </h2>
     </x-slot>
@@ -40,7 +40,7 @@
                         <div class="space-y-8">
                             <!-- Initial Quotation -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                                <h3 class="text-lg font-bold text-fuchsia-700 mb-4 border-b pb-2">1. Cotización Inicial</h3>
+                                <h3 class="text-lg font-bold text-vc-purple mb-4 border-b pb-2">1. Cotización Inicial</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
@@ -55,7 +55,7 @@
 
                             <!-- Confirmation -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                                <h3 class="text-lg font-bold text-fuchsia-700 mb-4 border-b pb-2">2. Seguimiento: Confirmación</h3>
+                                <h3 class="text-lg font-bold text-vc-purple mb-4 border-b pb-2">2. Seguimiento: Confirmación</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
@@ -70,7 +70,7 @@
 
                             <!-- Service -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                                <h3 class="text-lg font-bold text-fuchsia-700 mb-4 border-b pb-2">3. Seguimiento: Servicio</h3>
+                                <h3 class="text-lg font-bold text-vc-purple mb-4 border-b pb-2">3. Seguimiento: Servicio</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
@@ -85,7 +85,7 @@
 
                             <!-- Access -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                                <h3 class="text-lg font-bold text-fuchsia-700 mb-4 border-b pb-2">4. Seguimiento: Accesos</h3>
+                                <h3 class="text-lg font-bold text-vc-purple mb-4 border-b pb-2">4. Seguimiento: Accesos</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
@@ -100,7 +100,7 @@
 
                             <!-- Resend -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                                <h3 class="text-lg font-bold text-fuchsia-700 mb-4 border-b pb-2">5. Reenvío</h3>
+                                <h3 class="text-lg font-bold text-vc-purple mb-4 border-b pb-2">5. Reenvío</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>

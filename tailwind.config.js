@@ -19,6 +19,7 @@ export default {
                 'vc-magenta': '#F2059F',
                 'vc-purple': '#8704BF',
                 'vc-indigo': '#5F1BF2',
+                'vc-cyan': '#00F0FF', // Added for coherence with new logo
             },
         },
     },

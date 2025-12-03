@@ -1,7 +1,7 @@
 ﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Nueva CotizaciÃ³n') }}
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            {{ __('Nueva Cotizacion') }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <div class="bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl shadow-[#5F1BF2]/20 backdrop-blur">
                 <p class="text-xs uppercase tracking-[0.25em] text-white/70">Cotizaciones</p>
-                <h1 class="text-3xl font-bold text-white mt-2">Nueva CotizaciÃ‡Ã¼n</h1>
+                <h1 class="text-3xl font-bold text-white mt-2">Nueva Cotizacion</h1>
                 <p class="text-white/80 text-sm mt-2">Completa los datos del cliente y arma tu propuesta con el esquema violeta-fucsia.</p>
             </div>
 
@@ -31,7 +31,7 @@
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
                             <div>
-                                <x-input-label for="client_company" :value="__('Empresa / RazÃ³n Social')" class="text-gray-700" />
+                                <x-input-label for="client_company" :value="__('Empresa / Razon Social')" class="text-gray-700" />
                                 <x-text-input id="client_company" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="text" name="client_company" />
                                 <x-input-error :messages="$errors->get('client_company')" class="mt-2" />
                             </div>
@@ -41,17 +41,17 @@
                                 <x-input-error :messages="$errors->get('client_ruc')" class="mt-2" />
                             </div>
                             <div>
-                                <x-input-label for="client_phone" :value="__('TelÃ©fono')" class="text-gray-700" />
+                                <x-input-label for="client_phone" :value="__('Telefono')" class="text-gray-700" />
                                 <x-text-input id="client_phone" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="text" name="client_phone" />
                                 <x-input-error :messages="$errors->get('client_phone')" class="mt-2" />
                             </div>
                             <div>
-                                <x-input-label for="client_email" :value="__('Correo ElectrÃ³nico')" class="text-gray-700" />
+                                <x-input-label for="client_email" :value="__('Correo Electronico')" class="text-gray-700" />
                                 <x-text-input id="client_email" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="email" name="client_email" />
                                 <x-input-error :messages="$errors->get('client_email')" class="mt-2" />
                             </div>
                             <div class="md:col-span-2">
-                                <x-input-label for="client_address" :value="__('DirecciÃ³n')" class="text-gray-700" />
+                                <x-input-label for="client_address" :value="__('Direccion')" class="text-gray-700" />
                                 <x-text-input id="client_address" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="text" name="client_address" />
                                 <x-input-error :messages="$errors->get('client_address')" class="mt-2" />
                             </div>
