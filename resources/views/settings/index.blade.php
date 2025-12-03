@@ -27,13 +27,13 @@
                         <div class="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <h3 class="text-sm font-bold text-gray-700 mb-2">Variables Disponibles:</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-gray-600">
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Nombre]</span> : Nombre Cliente</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Empresa]</span> : Empresa</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[RUC]</span> : RUC</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Fecha]</span> : Fecha Cotización</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Servicio]</span> : Servicio Principal</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Total]</span> : Monto Total</div>
-                                <div><span class="font-mono font-bold text-fuchsia-600">[Link]</span> : Enlace PDF</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Nombre]</span> : Nombre Cliente</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Empresa]</span> : Empresa</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[RUC]</span> : RUC</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Fecha]</span> : Fecha Cotización</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Servicio]</span> : Servicio Principal</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Total]</span> : Monto Total</div>
+                                <div><span class="font-mono font-bold text-vc-magenta">[Link]</span> : Enlace PDF</div>
                             </div>
                         </div>
 
@@ -44,11 +44,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
-                                        <textarea name="quotation_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['quotation_email_message'] ?? "Hola [Nombre],\n\nAdjunto encontrarás la cotización solicitada para el servicio de [Servicio].\n\nQuedamos atentos a tus comentarios.\n\nSaludos,\nVia Comunicativa" }}</textarea>
+                                        <textarea name="quotation_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['quotation_email_message'] ?? "Hola [Nombre],\n\nAdjunto encontrarás la cotización solicitada para el servicio de [Servicio].\n\nQuedamos atentos a tus comentarios.\n\nSaludos,\nVia Comunicativa" }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para WhatsApp</label>
-                                        <textarea name="quotation_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['quotation_whatsapp_message'] ?? "Hola [Nombre], te adjunto la cotización para [Servicio]. Quedo atento." }}</textarea>
+                                        <textarea name="quotation_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['quotation_whatsapp_message'] ?? "Hola [Nombre], te adjunto la cotización para [Servicio]. Quedo atento." }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -59,11 +59,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
-                                        <textarea name="confirmation_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['confirmation_email_message'] ?? "Hola [Nombre],\n\n¿Pudiste revisar la cotización enviada el [Fecha]?\n\nQuedo atento a tu confirmación para proceder.\n\nSaludos." }}</textarea>
+                                        <textarea name="confirmation_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['confirmation_email_message'] ?? "Hola [Nombre],\n\n¿Pudiste revisar la cotización enviada el [Fecha]?\n\nQuedo atento a tu confirmación para proceder.\n\nSaludos." }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para WhatsApp</label>
-                                        <textarea name="confirmation_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['confirmation_whatsapp_message'] ?? "Hola [Nombre], ¿pudiste revisar la cotización? Quedo atento." }}</textarea>
+                                        <textarea name="confirmation_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['confirmation_whatsapp_message'] ?? "Hola [Nombre], ¿pudiste revisar la cotización? Quedo atento." }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -74,11 +74,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
-                                        <textarea name="service_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['service_email_message'] ?? "Hola [Nombre],\n\nTe escribo para coordinar los detalles del servicio de [Servicio].\n\n¿Cuándo tendrías disponibilidad para una reunión?\n\nSaludos." }}</textarea>
+                                        <textarea name="service_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['service_email_message'] ?? "Hola [Nombre],\n\nTe escribo para coordinar los detalles del servicio de [Servicio].\n\n¿Cuándo tendrías disponibilidad para una reunión?\n\nSaludos." }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para WhatsApp</label>
-                                        <textarea name="service_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['service_whatsapp_message'] ?? "Hola [Nombre], coordinemos los detalles del servicio. ¿Tienes un momento?" }}</textarea>
+                                        <textarea name="service_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['service_whatsapp_message'] ?? "Hola [Nombre], coordinemos los detalles del servicio. ¿Tienes un momento?" }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -89,11 +89,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
-                                        <textarea name="access_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['access_email_message'] ?? "Hola [Nombre],\n\nPara iniciar con el servicio, necesitamos que nos facilites los accesos correspondientes.\n\nQuedamos a la espera.\n\nSaludos." }}</textarea>
+                                        <textarea name="access_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['access_email_message'] ?? "Hola [Nombre],\n\nPara iniciar con el servicio, necesitamos que nos facilites los accesos correspondientes.\n\nQuedamos a la espera.\n\nSaludos." }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para WhatsApp</label>
-                                        <textarea name="access_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['access_whatsapp_message'] ?? "Hola [Nombre], necesitamos los accesos para iniciar. ¿Podrías enviárnoslos?" }}</textarea>
+                                        <textarea name="access_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['access_whatsapp_message'] ?? "Hola [Nombre], necesitamos los accesos para iniciar. ¿Podrías enviárnoslos?" }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -104,11 +104,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para Email</label>
-                                        <textarea name="resend_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['resend_email_message'] ?? "Hola [Nombre],\n\nTe reenvío la cotización solicitada.\n\nCualquier duda quedo atento.\n\nSaludos." }}</textarea>
+                                        <textarea name="resend_email_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['resend_email_message'] ?? "Hola [Nombre],\n\nTe reenvío la cotización solicitada.\n\nCualquier duda quedo atento.\n\nSaludos." }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje para WhatsApp</label>
-                                        <textarea name="resend_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-fuchsia-500 focus:ring-fuchsia-500 text-sm">{{ $settings['resend_whatsapp_message'] ?? "Hola [Nombre], aquí tienes la cotización nuevamente." }}</textarea>
+                                        <textarea name="resend_whatsapp_message" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-vc-magenta focus:ring-vc-magenta text-sm text-gray-900">{{ $settings['resend_whatsapp_message'] ?? "Hola [Nombre], aquí tienes la cotización nuevamente." }}</textarea>
                                     </div>
                                 </div>
                             </div>
