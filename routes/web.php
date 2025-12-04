@@ -8,9 +8,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DomainController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -20,6 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('quotations', QuotationController::class)->only(['index', 'create', 'store', 'show', 'update', 'destroy']);
     Route::get('/quotations/{quotation}/download', [QuotationController::class, 'downloadPDF'])->name('quotations.download');
     Route::post('/quotations/{quotation}/send-email', [QuotationController::class, 'sendEmail'])->name('quotations.send-email');
+
+    // Domains Management
+    Route::resource('domains', App\Http\Controllers\DomainController::class);
 
     Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');

@@ -12,8 +12,8 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <!-- Navigation Links + User -->
+                <div class="hidden sm:flex sm:items-center sm:ms-10 space-x-8 sm:-my-px">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-gray-200 border-transparent hover:border-white">
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -26,12 +26,43 @@
                     <x-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.index')" class="text-white hover:text-gray-200 border-transparent hover:border-white">
                         {{ __('Ajustes') }}
                     </x-nav-link>
+
+                    <!-- Settings Dropdown (Administrador) -->
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white hover:text-gray-200 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ Auth::user()->name }}</div>
+
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
             </div>
 
-            <!-- Notification Center -->
+            <!-- Notification Center flotante y siempre visible -->
             <div class="hidden sm:flex sm:items-center sm:ms-6" x-data="{ 
-                open: false, 
                 reminders: [],
                 loading: true,
                 init() {
@@ -43,27 +74,8 @@
                         });
                 }
             }">
-                <div class="relative">
-                    <button @click="open = !open" class="p-2 rounded-full text-white hover:bg-white/20 focus:outline-none transition-colors duration-200">
-                        <span class="sr-only">View notifications</span>
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                        <!-- Badge -->
-                        <span x-show="reminders.length > 0" x-text="reminders.length" class="absolute top-0 right-0 block h-4 w-4 rounded-full ring-2 ring-[#BF1F6A] bg-yellow-400 text-[#BF1F6A] text-[10px] font-bold text-center leading-3"></span>
-                    </button>
-
-                    <!-- Dropdown -->
-                    <div x-show="open" 
-                         @click.away="open = false"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="transform opacity-0 scale-95 translate-y-2"
-                         x-transition:enter-end="transform opacity-100 scale-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
-                         x-transition:leave-end="transform opacity-0 scale-95 translate-y-2"
-                         class="origin-top-right absolute right-0 mt-2 w-96 rounded-xl shadow-2xl py-1 bg-white ring-1 ring-black ring-opacity-5 border border-gray-100 focus:outline-none z-[100]"
-                         style="display: none;">
+                <!-- Panel flotante fijo al lado derecho, sin ícono -->
+                <div class="fixed top-20 right-8 w-96 rounded-xl shadow-2xl py-1 bg-white ring-1 ring-black ring-opacity-5 border border-gray-100 z-[100] pointer-events-auto">
                         
                         <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
                             <h3 class="text-sm font-bold text-gray-900">Notificaciones</h3>
@@ -109,40 +121,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white hover:text-gray-200 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
             </div>
 
             <!-- Hamburger -->

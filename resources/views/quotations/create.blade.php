@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Nueva Cotizacion') }}
@@ -17,7 +17,7 @@
                 <div class="absolute -top-6 -left-10 h-32 w-32 bg-gradient-to-br from-[#5F1BF2] to-[#F2059F] blur-3xl opacity-40 pointer-events-none"></div>
                 <div class="absolute -bottom-12 -right-6 h-36 w-36 bg-gradient-to-br from-[#8704BF] to-[#BF1F6A] blur-3xl opacity-35 pointer-events-none"></div>
 
-                <div class="bg-white/90 backdrop-blur-xl overflow-hidden shadow-2xl sm:rounded-3xl border border-white/50 relative">
+                <div class="bg-white/90 backdrop-blur-xl shadow-2xl sm:rounded-3xl border border-white/50 relative">
                     <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#5F1BF2] via-[#8704BF] to-[#F2059F]"></div>
                     <div class="p-8 text-gray-800 space-y-8">
                         <form method="POST" action="{{ route('quotations.store') }}" x-data="quotationForm()">
@@ -68,30 +68,88 @@
                                                 <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-24">Cantidad</th>
                                                 <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-32">Precio</th>
                                                 <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-32">Total</th>
-                                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-20 text-center">Acción</th>
+                                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-20 text-center">Accion</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100 bg-white/60">
                                             <template x-for="(item, index) in items" :key="index">
-                                                <tr class="hover:bg-white transition-colors">
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <div x-data="{ isCustom: false }" x-init="isCustom = !['WEB INFORMATIVA', 'WEB E-COMMERCE', 'WEB AULA VIRTUAL', 'POSICIONAMIENTO SEO', 'LICENCIA DE ANTIVIRUS', 'PLUGIN YOAST SEO', 'RESTRUCTURACIÓN BÁSICA', 'RESTRUCTURACIÓN E-COMMERCE', 'WEB FUSION E-COMMERCE', 'WEB FUSION AULA VIRTUAL'].includes(item.service_name) && item.service_name !== ''">
-                                                            <select x-show="!isCustom" @change="if($event.target.value === 'OTRO') { isCustom = true; item.service_name = ''; } else { item.service_name = $event.target.value; }" class="block w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl shadow-sm">
-                                                                <option value="">Seleccione...</option>
-                                                                <option value="WEB INFORMATIVA">WEB INFORMATIVA</option>
-                                                                <option value="WEB E-COMMERCE">WEB E-COMMERCE</option>
-                                                                <option value="WEB AULA VIRTUAL">WEB AULA VIRTUAL</option>
-                                                                <option value="POSICIONAMIENTO SEO">POSICIONAMIENTO SEO</option>
-                                                                <option value="LICENCIA DE ANTIVIRUS">LICENCIA DE ANTIVIRUS</option>
-                                                                <option value="PLUGIN YOAST SEO">PLUGIN YOAST SEO</option>
-                                                                <option value="RESTRUCTURACIÓN BÁSICA">RESTRUCTURACIÓN BÁSICA</option>
-                                                                <option value="RESTRUCTURACIÓN E-COMMERCE">RESTRUCTURACIÓN E-COMMERCE</option>
-                                                                <option value="WEB FUSION E-COMMERCE">WEB FUSION E-COMMERCE</option>
-                                                                <option value="WEB FUSION AULA VIRTUAL">WEB FUSION AULA VIRTUAL</option>
-                                                                <option value="OTRO">OTRO (Especificar)</option>
-                                                            </select>
+                                                <tr class="hover:text-white transition-colors">
+                                                    <td class="px-6 py-4 whitespace-nowrap overflow-visible relative">
+                                                        <div x-data="{ 
+                                                            isCustom: false, 
+                                                            dropdownOpen: false,
+                                                            dropdownStyle: '',
+                                                            services: [
+                                                                'WEB INFORMATIVA',
+                                                                'WEB E-COMMERCE',
+                                                                'WEB AULA VIRTUAL',
+                                                                'POSICIONAMIENTO SEO',
+                                                                'LICENCIA DE ANTIVIRUS',
+                                                                'PLUGIN YOAST SEO',
+                                                                'RESTRUCTURACION BASICA',
+                                                                'RESTRUCTURACION E-COMMERCE',
+                                                                'WEB FUSION E-COMMERCE',
+                                                                'WEB FUSION AULA VIRTUAL'
+                                                            ],
+                                                            selectService(service) {
+                                                                if(service === 'OTRO') {
+                                                                    this.isCustom = true;
+                                                                    item.service_name = '';
+                                                                } else {
+                                                                    item.service_name = service;
+                                                                }
+                                                                this.dropdownOpen = false;
+                                                            },
+                                                            updateDropdownPosition() {
+                                                                const rect = this.$refs.trigger.getBoundingClientRect();
+                                                                const top = rect.bottom + 50; // pequeño espacio bajo el campo
+                                                                const left = rect.left - 350; // mover un poco a la izquierda
+                                                                const width = rect.width + 00; // compensar el corrimiento
+                                                                this.dropdownStyle = `top:${top}px; left:${left}px; width:${width}px;`;
+                                                            }
+                                                        }" x-init="isCustom = !services.includes(item.service_name) && item.service_name !== ''">
+                                                            
+                                                            <!-- Custom Dropdown -->
+                                                            <div x-show="!isCustom" class="relative" @click.away="dropdownOpen = false">
+                                                                <!-- Dropdown Button -->
+                                                                <button type="button" x-ref="trigger" @click="dropdownOpen = !dropdownOpen; if(dropdownOpen) updateDropdownPosition()" class="block w-full bg-white border-2 border-[#F2059F] text-gray-900 focus:border-[#F2059F] focus:ring-2 focus:ring-[#F2059F] rounded-xl shadow-sm px-4 py-2.5 text-left flex justify-between items-center">
+                                                                    <span x-text="item.service_name || 'Seleccione...'" :class="!item.service_name ? 'text-gray-400' : 'text-gray-900'"></span>
+                                                                    <svg class="h-5 w-5 text-gray-400 transition-transform" :class="dropdownOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                                    </svg>
+                                                                </button>
+                                                                                                                                <!-- Dropdown Menu -->
+                                                                <div x-show="dropdownOpen"
+                                                                     x-transition:enter="transition ease-out duration-100"
+                                                                     x-transition:enter-start="transform opacity-0 scale-95"
+                                                                     x-transition:enter-end="transform opacity-100 scale-100"
+                                                                     x-transition:leave="transition ease-in duration-75"
+                                                                     x-transition:leave-start="transform opacity-100 scale-100"
+                                                                     x-transition:leave-end="transform opacity-0 scale-95"
+                                                                     class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-lg"
+                                                                     :style="dropdownStyle"
+                                                                     style="display: none;">
+                                                                    <div class="py-1 flex flex-col">
+                                                                        <template x-for="service in services" :key="service">
+                                                                            <button type="button" @click="selectService(service)" 
+                                                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors whitespace-nowrap"
+                                                                                    x-text="service">
+                                                                            </button>
+                                                                        </template>
+                                                                        <button type="button" @click="selectService('OTRO')" 
+                                                                                class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors border-t border-gray-200 whitespace-nowrap">
+                                                                            OTRO (Especificar)
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <!-- Hidden input to submit the value -->
+                                                                <input type="hidden" :name="'items['+index+'][service_name]'" x-model="item.service_name">
+                                                            </div>
+                                                            
+                                                            <!-- Custom Input -->
                                                             <div x-show="isCustom" class="flex gap-2">
-                                                                <input type="text" :name="'items['+index+'][service_name]'" x-model="item.service_name" placeholder="Descripción del servicio" class="block w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl shadow-sm">
+                                                                <input type="text" :name="'items['+index+'][service_name]'" x-model="item.service_name" placeholder="Descripcion del servicio" class="block w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl shadow-sm">
                                                                 <button type="button" @click="isCustom = false; item.service_name = ''" class="text-xs text-[#8704BF] hover:text-[#F2059F] underline whitespace-nowrap">Volver a lista</button>
                                                             </div>
                                                         </div>
@@ -151,7 +209,7 @@
 
                         <div class="flex items-center justify-end mt-6">
                             <x-primary-button class="ml-4 bg-vc-magenta hover:bg-fuchsia-600 focus:bg-fuchsia-600 active:bg-fuchsia-700 border-0 shadow-lg shadow-vc-magenta/30">
-                                {{ __('Generar CotizaciÃ³n') }}
+                                {{ __('Generar Cotizacion') }}
                             </x-primary-button>
                         </div>
                     </form>
@@ -186,4 +244,3 @@
         }
     </script>
 </x-app-layout>
-

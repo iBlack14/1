@@ -203,17 +203,6 @@ class QuotationController extends Controller
         
         $reminders = [];
 
-        // TEST REMINDER (ALWAYS SHOWS)
-        $reminders[] = [
-            'id' => 99999,
-            'client' => 'PRUEBA DE CONEXIÓN',
-            'reason' => 'Si ves esto, la API funciona.',
-            'note' => 'El problema está en el filtro de fechas.',
-            'phone' => '51999999999',
-            'date' => $today,
-            'link' => '#'
-        ];
-
         foreach ($quotations as $quotation) {
             $isDue = false;
             $reason = '';
@@ -261,4 +250,7 @@ class QuotationController extends Controller
         return response()->json($reminders);
     }
 }
+
+
+
 
