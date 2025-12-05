@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('quotations', QuotationController::class)->only(['index', 'create', 'store', 'show', 'update', 'destroy']);
     Route::get('/quotations/{quotation}/download', [QuotationController::class, 'downloadPDF'])->name('quotations.download');
     Route::post('/quotations/{quotation}/send-email', [QuotationController::class, 'sendEmail'])->name('quotations.send-email');
+    Route::get('/quotations-export', [QuotationController::class, 'export'])->name('quotations.export');
 
     // Domains Management
     Route::resource('domains', App\Http\Controllers\DomainController::class);

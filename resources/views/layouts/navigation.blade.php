@@ -75,16 +75,9 @@
                 }
             }">
                 <!-- Panel flotante fijo al lado derecho, sin ícono -->
-                <div class="fixed top-20 right-8 w-96 rounded-xl shadow-2xl py-1 bg-white ring-1 ring-black ring-opacity-5 border border-gray-100 z-[100] pointer-events-auto">
-                        
-                        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
-                            <h3 class="text-sm font-bold text-gray-900">Notificaciones</h3>
-                            <button class="text-xs text-[#BF1F6A] hover:text-[#8704BF] font-medium transition-colors">
-                                Marcar todas como leídas
-                            </button>
-                        </div>
+                <div class="fixed top-20 right-8 w-80 rounded-xl shadow-2xl bg-white ring-1 ring-black ring-opacity-5 border border-gray-100 z-[100] pointer-events-auto">
 
-                        <div class="max-h-[400px] overflow-y-auto">
+                        <div class="max-h-[300px] overflow-y-auto">
                             <template x-for="reminder in reminders" :key="reminder.id">
                                 <div class="px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0 transition-colors duration-150">
                                     <div class="flex items-start">

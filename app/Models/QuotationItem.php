@@ -12,6 +12,7 @@ class QuotationItem extends Model
         'quantity',
         'price',
         'total',
+        'image_path',
     ];
 
     public function quotation()

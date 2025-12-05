@@ -28,6 +28,7 @@ class QuotationController extends Controller
             'items.*.service_name' => 'required|string',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
+            'items.*.image_path' => 'nullable|string',
             'apply_igv' => 'boolean',
         ]);
 
@@ -60,6 +61,7 @@ class QuotationController extends Controller
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
                 'total' => $item['quantity'] * $item['price'],
+                'image_path' => $item['image_path'] ?? null,
             ]);
         }
 

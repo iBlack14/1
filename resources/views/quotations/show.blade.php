@@ -16,6 +16,8 @@
             font-family: Arial, sans-serif;
             background: #f5f5f5;
             padding: 20px;
+            max-height: 100vh;
+            overflow-y: auto;
         }
 
         .preview-actions {
@@ -502,6 +504,7 @@
 
         {{-- Logic for Extra Pages based on Services --}}
         @php
+            // Mapeo antiguo como fallback
             $concept_image_map = [
                 'WEB INFORMATIVA' => ['web-informativa.png'],
                 'WEB E-COMMERCE' => ['E-COMERCE.png'],
@@ -515,11 +518,20 @@
 
             $selected_images = [];
             foreach($quotation->items as $item) {
-                $service = strtoupper(trim($item->service_name));
-                if(isset($concept_image_map[$service])) {
-                    foreach($concept_image_map[$service] as $img) {
-                        if(!in_array($img, $selected_images)) {
-                            $selected_images[] = $img;
+                // Prioridad 1: Imagen personalizada seleccionada por el usuario
+                if(!empty($item->image_path)) {
+                    $imageName = basename($item->image_path);
+                    if(!in_array($imageName, $selected_images)) {
+                        $selected_images[] = $imageName;
+                    }
+                } else {
+                    // Prioridad 2: Mapeo automático por nombre de servicio
+                    $service = strtoupper(trim($item->service_name));
+                    if(isset($concept_image_map[$service])) {
+                        foreach($concept_image_map[$service] as $img) {
+                            if(!in_array($img, $selected_images)) {
+                                $selected_images[] = $img;
+                            }
                         }
                     }
                 }

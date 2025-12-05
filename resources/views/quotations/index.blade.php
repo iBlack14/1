@@ -5,10 +5,23 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" x-data="{ showFilters: false }">
         <div class="max-w-[95%] mx-auto sm:px-6 lg:px-8">
             <div class="bg-white/70 backdrop-blur-md overflow-hidden shadow-xl sm:rounded-lg border border-white/50">
                 <div class="p-8">
+                    <!-- Header with Export Button -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-[#8704BF] to-[#F2059F] bg-clip-text text-transparent">
+                            Listado de Cotizaciones
+                        </h3>
+                        <button @click="showFilters = true" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5F1BF2] to-[#F2059F] border-0 rounded-xl font-semibold text-sm text-white uppercase tracking-widest shadow-lg shadow-[#8704BF]/30 hover:shadow-xl hover:shadow-[#8704BF]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BF1F6A] transition-all duration-150 hover:scale-105">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Exportar a Excel
+                        </button>
+                    </div>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
@@ -270,7 +283,196 @@
                 </div>
             </div>
         </div>
+
+        <!-- Export Modal -->
+        <div x-show="showFilters" 
+             x-transition:enter="ease-out duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="ease-in duration-200" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-50 overflow-y-auto" 
+             style="display: none;"
+             aria-labelledby="modal-title" 
+             role="dialog" 
+             aria-modal="true">
+            
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="showFilters"
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+                     @click="showFilters = false"
+                     aria-hidden="true"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div x-show="showFilters" 
+                     x-transition:enter="ease-out duration-300" 
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                     x-transition:leave="ease-in duration-200" 
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                     class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    
+                    <form method="GET" action="{{ route('quotations.export') }}">
+                        <div class="bg-gradient-to-r from-[#5F1BF2] to-[#F2059F] px-6 py-4">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-xl leading-6 font-bold text-white" id="modal-title">
+                                    Exportar Cotizaciones
+                                </h3>
+                                <button type="button" @click="showFilters = false" class="text-white hover:text-gray-200 focus:outline-none">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white px-6 py-6 space-y-4">
+                            <p class="text-sm text-gray-500 mb-4">Selecciona los filtros que deseas aplicar a la exportación (opcional):</p>
+                            
+                            <!-- Date Range -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Desde</label>
+                                    <input type="date" name="date_from" class="w-full rounded-lg border-gray-300 text-gray-900 focus:border-[#8704BF] focus:ring-[#8704BF] shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Hasta</label>
+                                    <input type="date" name="date_to" class="w-full rounded-lg border-gray-300 text-gray-900 focus:border-[#8704BF] focus:ring-[#8704BF] shadow-sm">
+                                </div>
+                            </div>
+
+                            <!-- Message Filter -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Estado/Mensaje</label>
+                                <select name="message" class="w-full rounded-lg border-gray-300 text-gray-900 focus:border-[#8704BF] focus:ring-[#8704BF] shadow-sm">
+                                    <option value="">Todos los estados</option>
+                                    <option value="Confirmación">Confirmación</option>
+                                    <option value="Servicio">Servicio</option>
+                                    <option value="Acceso de su servicio">Acceso de su servicio</option>
+                                </select>
+                            </div>
+
+                            <!-- Client Filter -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Buscar Cliente (Nombre, Empresa o ID)</label>
+                                <input type="text" name="client" placeholder="Ej: Maria, Acme Corp, 12345..." class="w-full rounded-lg border-gray-300 text-gray-900 placeholder-gray-400 focus:border-[#8704BF] focus:ring-[#8704BF] shadow-sm">
+                            </div>
+
+                            <!-- Columns Selection -->
+                            <div class="border-t pt-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <label class="block text-sm font-semibold text-gray-700">Columnas a Exportar</label>
+                                    <button type="button" onclick="toggleAllColumns()" class="text-xs text-[#8704BF] hover:text-[#F2059F] font-medium">
+                                        Seleccionar/Deseleccionar Todas
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="id" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">ID</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="empresa" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Empresa/Cliente</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="contacto" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Contacto</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="email" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Email</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="telefono" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Teléfono</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="ruc" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">RUC</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="direccion" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Dirección</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="servicio" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Servicio Principal</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="descripcion" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Descripción</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="total" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Total</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="fecha_envio" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Fecha Envío</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="fecha_respuesta" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Fecha Respuesta</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="mensaje" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Mensaje</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="nota" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Nota</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="usuario" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Usuario</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="estado" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Estado</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm hover:bg-white px-2 py-1 rounded cursor-pointer">
+                                        <input type="checkbox" name="columns[]" value="eliminado" checked class="column-checkbox rounded text-[#8704BF] focus:ring-[#8704BF]">
+                                        <span class="text-gray-700">Eliminado</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <script>
+                                function toggleAllColumns() {
+                                    const checkboxes = document.querySelectorAll('.column-checkbox');
+                                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                                    checkboxes.forEach(cb => cb.checked = !allChecked);
+                                }
+                            </script>
+                        </div>
+
+                        <div class="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row-reverse gap-3">
+                            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5F1BF2] to-[#F2059F] border-0 rounded-xl font-semibold text-sm text-white uppercase tracking-widest shadow-lg shadow-[#8704BF]/30 hover:shadow-xl hover:shadow-[#8704BF]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BF1F6A] transition-all duration-150">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Exportar Ahora
+                            </button>
+                            <button type="button" @click="showFilters = false" class="w-full sm:w-auto inline-flex justify-center px-6 py-3 bg-white border-2 border-gray-300 rounded-xl font-semibold text-sm text-gray-700 uppercase tracking-widest hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-150">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
     <style>
         .no-scrollbar::-webkit-scrollbar {
             display: none;
