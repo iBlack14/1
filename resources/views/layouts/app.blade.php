@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased overflow-x-hidden">
         <div class="min-h-screen relative bg-gradient-to-br from-[#5F1BF2] via-[#8704BF] to-[#BF1F6A] text-white">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(242,5,159,0.18),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(95,27,242,0.18),transparent_32%),radial-gradient(circle_at_60%_85%,rgba(191,31,106,0.2),transparent_40%)] pointer-events-none"></div>
 

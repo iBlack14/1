@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-7xl mx-auto lg:px-8 space-y-8">
             <div class="bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl shadow-[#5F1BF2]/20 backdrop-blur">
                 <p class="text-xs uppercase tracking-[0.25em] text-white/70">Cotizaciones</p>
                 <h1 class="text-3xl font-bold text-white mt-2">Nueva Cotizacion</h1>
@@ -20,7 +20,7 @@
                 <div class="bg-white/90 backdrop-blur-xl shadow-2xl sm:rounded-3xl border border-white/50 relative">
                     <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#5F1BF2] via-[#8704BF] to-[#F2059F]"></div>
                     <div class="p-8 text-gray-800 space-y-8">
-                        <form method="POST" action="{{ route('quotations.store') }}" x-data="quotationForm()">
+                        <form method="POST" action="{{ route('quotations.store') }}" target="_blank" x-data="quotationForm()">
                             @csrf
 
                             <!-- Client Data -->
@@ -112,35 +112,33 @@
                                                             <!-- Custom Dropdown -->
                                                             <div x-show="!isCustom" class="relative" @click.away="dropdownOpen = false">
                                                                 <!-- Dropdown Button -->
-                                                                <button type="button" 
-                                                                    @click="dropdownOpen = !dropdownOpen; if(dropdownOpen) { $nextTick(() => { const rect = $el.getBoundingClientRect(); $refs.menu.style.top = rect.bottom + 4 + 'px'; $refs.menu.style.left = rect.left + 'px'; $refs.menu.style.width = rect.width + 'px'; }) }" 
-                                                                    class="block w-full bg-white border-2 border-[#F2059F] text-gray-900 focus:border-[#F2059F] focus:ring-2 focus:ring-[#F2059F] rounded-xl shadow-sm px-4 py-2.5 text-left flex justify-between items-center">
+                                                                <button type="button" x-ref="trigger" @click="dropdownOpen = !dropdownOpen; if(dropdownOpen) updateDropdownPosition()" class="block w-full bg-white border-2 border-[#F2059F] text-gray-900 focus:border-[#F2059F] focus:ring-2 focus:ring-[#F2059F] rounded-xl shadow-sm px-4 py-2.5 text-left flex justify-between items-center">
                                                                     <span x-text="item.service_name || 'Seleccione...'" :class="!item.service_name ? 'text-gray-400' : 'text-gray-900'"></span>
                                                                     <svg class="h-5 w-5 text-gray-400 transition-transform" :class="dropdownOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                                                     </svg>
                                                                 </button>
-                                                                <!-- Dropdown Menu -->
+                                                                                                                                <!-- Dropdown Menu -->
                                                                 <div x-show="dropdownOpen"
-                                                                     x-ref="menu"
                                                                      x-transition:enter="transition ease-out duration-100"
                                                                      x-transition:enter-start="transform opacity-0 scale-95"
                                                                      x-transition:enter-end="transform opacity-100 scale-100"
                                                                      x-transition:leave="transition ease-in duration-75"
                                                                      x-transition:leave-start="transform opacity-100 scale-100"
                                                                      x-transition:leave-end="transform opacity-0 scale-95"
-                                                                     class="fixed z-[9999] bg-white border-2 border-[#8704BF]/20 rounded-xl shadow-2xl max-h-60 overflow-y-auto"
+                                                                     class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-lg max-h-[60vh] overflow-y-auto"
+                                                                     :style="dropdownStyle"
                                                                      style="display: none;">
                                                                     <div class="py-1 flex flex-col">
                                                                         <template x-for="service in services" :key="service">
                                                                             <button type="button" @click="selectService(service)" 
-                                                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gradient-to-r hover:from-[#8704BF] hover:to-[#F2059F] hover:text-white transition-all duration-200 whitespace-nowrap"
+                                                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors whitespace-nowrap"
                                                                                     x-text="service">
                                                                             </button>
                                                                         </template>
                                                                         <button type="button" @click="selectService('OTRO')" 
-                                                                                class="block w-full text-left px-4 py-2 text-sm font-medium text-[#8704BF] hover:bg-gradient-to-r hover:from-[#8704BF] hover:to-[#F2059F] hover:text-white transition-all duration-200 border-t-2 border-gray-200 whitespace-nowrap">
-                                                                            ✏️ OTRO (Especificar)
+                                                                                class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors border-t border-gray-200 whitespace-nowrap">
+                                                                            OTRO (Especificar)
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -150,9 +148,75 @@
                                                             </div>
                                                             
                                                             <!-- Custom Input -->
-                                                            <div x-show="isCustom" class="flex gap-2">
-                                                                <input type="text" :name="'items['+index+'][service_name]'" x-model="item.service_name" placeholder="Descripcion del servicio" class="block w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl shadow-sm">
-                                                                <button type="button" @click="isCustom = false; item.service_name = ''" class="text-xs text-[#8704BF] hover:text-[#F2059F] underline whitespace-nowrap">Volver a lista</button>
+                                                            <div x-show="isCustom" class="space-y-3">
+                                                                <div class="flex gap-2">
+                                                                    <input type="text" :name="'items['+index+'][service_name]'" x-model="item.service_name" placeholder="Descripcion del servicio" class="block w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl shadow-sm">
+                                                                    <button type="button" @click="isCustom = false; item.service_name = ''" class="text-xs text-[#8704BF] hover:text-[#F2059F] underline whitespace-nowrap">Volver a lista</button>
+                                                                </div>
+                                                                
+                                                                <!-- Image Gallery Selector -->
+                                                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                                                    <div class="flex justify-between items-center mb-2">
+                                                                        <label class="block text-sm font-medium text-gray-700">
+                                                                            <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            Imagen del Servicio
+                                                                        </label>
+                                                                        <button type="button" @click="item.showGallery = !item.showGallery" class="text-xs px-3 py-1 bg-gradient-to-r from-[#5F1BF2] to-[#F2059F] text-white rounded-lg hover:opacity-90">
+                                                                            <span x-text="item.showGallery ? 'Ocultar' : 'Seleccionar'"></span>
+                                                                        </button>
+                                                                    </div>
+                                                                    
+                                                                    <!-- Hidden input SIEMPRE presente -->
+                                                                    <input type="hidden" :name="'items['+index+'][image_path]'" :value="item.selectedImage || ''">
+                                                                    
+                                                                    <!-- Image Preview - shows logo.png as placeholder -->
+                                                                    <div class="mb-3 bg-white rounded-lg p-2 border border-gray-200">
+                                                                        <img :src="item.selectedImage || '{{ asset('images/logo.png') }}'" class="max-h-24 mx-auto rounded-lg border-2 shadow-sm" :class="item.selectedImage ? 'border-[#8704BF] object-cover' : 'border-gray-300 opacity-40 object-contain'" style="max-width: 100%;">
+                                                                        <p x-show="!item.selectedImage" class="text-xs text-gray-500 mt-1 text-center">Vista previa - Selecciona una imagen</p>
+                                                                    </div>
+
+                                                                    <!-- Gallery Grid -->
+                                                                    <div x-show="item.showGallery" x-transition class="grid grid-cols-3 gap-2 mt-2 max-h-64 overflow-y-auto p-2 bg-white rounded-lg">
+                                                                        <div @click="item.selectedImage = '{{ asset('images/web-informativa.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/web-informativa.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/web-informativa.png') }}" alt="Web Informativa" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">Web Informativa</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div @click="item.selectedImage = '{{ asset('images/E-COMERCE.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/E-COMERCE.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/E-COMERCE.png') }}" alt="E-Commerce" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">E-Commerce</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div @click="item.selectedImage = '{{ asset('images/aula-virtual.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/aula-virtual.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/aula-virtual.png') }}" alt="Aula Virtual" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">Aula Virtual</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div @click="item.selectedImage = '{{ asset('images/posicionamiento-seo.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/posicionamiento-seo.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/posicionamiento-seo.png') }}" alt="Posicionamiento SEO" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">Posicionamiento SEO</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div @click="item.selectedImage = '{{ asset('images/yoast-seo.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/yoast-seo.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/yoast-seo.png') }}" alt="Yoast SEO" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">Yoast SEO</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div @click="item.selectedImage = '{{ asset('images/restructuracion.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/restructuracion.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                            <img src="{{ asset('images/restructuracion.png') }}" alt="Reestructuración" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                <span class="text-white text-[10px] font-medium truncate">Reestructuración</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -224,11 +288,11 @@
         function quotationForm() {
             return {
                 items: [
-                    { service_name: '', quantity: 1, price: 0 }
+                    { service_name: '', quantity: 1, price: 0, selectedImage: null, showGallery: false }
                 ],
                 applyIgv: false,
                 addItem() {
-                    this.items.push({ service_name: '', quantity: 1, price: 0 });
+                    this.items.push({ service_name: '', quantity: 1, price: 0, selectedImage: null, showGallery: false });
                 },
                 removeItem(index) {
                     this.items.splice(index, 1);
