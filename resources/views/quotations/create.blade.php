@@ -112,33 +112,35 @@
                                                             <!-- Custom Dropdown -->
                                                             <div x-show="!isCustom" class="relative" @click.away="dropdownOpen = false">
                                                                 <!-- Dropdown Button -->
-                                                                <button type="button" x-ref="trigger" @click="dropdownOpen = !dropdownOpen; if(dropdownOpen) updateDropdownPosition()" class="block w-full bg-white border-2 border-[#F2059F] text-gray-900 focus:border-[#F2059F] focus:ring-2 focus:ring-[#F2059F] rounded-xl shadow-sm px-4 py-2.5 text-left flex justify-between items-center">
+                                                                <button type="button" 
+                                                                    @click="dropdownOpen = !dropdownOpen; if(dropdownOpen) { $nextTick(() => { const rect = $el.getBoundingClientRect(); $refs.menu.style.top = rect.bottom + 4 + 'px'; $refs.menu.style.left = rect.left + 'px'; $refs.menu.style.width = rect.width + 'px'; }) }" 
+                                                                    class="block w-full bg-white border-2 border-[#F2059F] text-gray-900 focus:border-[#F2059F] focus:ring-2 focus:ring-[#F2059F] rounded-xl shadow-sm px-4 py-2.5 text-left flex justify-between items-center">
                                                                     <span x-text="item.service_name || 'Seleccione...'" :class="!item.service_name ? 'text-gray-400' : 'text-gray-900'"></span>
                                                                     <svg class="h-5 w-5 text-gray-400 transition-transform" :class="dropdownOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                                                     </svg>
                                                                 </button>
-                                                                                                                                <!-- Dropdown Menu -->
+                                                                <!-- Dropdown Menu -->
                                                                 <div x-show="dropdownOpen"
+                                                                     x-ref="menu"
                                                                      x-transition:enter="transition ease-out duration-100"
                                                                      x-transition:enter-start="transform opacity-0 scale-95"
                                                                      x-transition:enter-end="transform opacity-100 scale-100"
                                                                      x-transition:leave="transition ease-in duration-75"
                                                                      x-transition:leave-start="transform opacity-100 scale-100"
                                                                      x-transition:leave-end="transform opacity-0 scale-95"
-                                                                     class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-lg"
-                                                                     :style="dropdownStyle"
+                                                                     class="fixed z-[9999] bg-white border-2 border-[#8704BF]/20 rounded-xl shadow-2xl max-h-60 overflow-y-auto"
                                                                      style="display: none;">
                                                                     <div class="py-1 flex flex-col">
                                                                         <template x-for="service in services" :key="service">
                                                                             <button type="button" @click="selectService(service)" 
-                                                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors whitespace-nowrap"
+                                                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gradient-to-r hover:from-[#8704BF] hover:to-[#F2059F] hover:text-white transition-all duration-200 whitespace-nowrap"
                                                                                     x-text="service">
                                                                             </button>
                                                                         </template>
                                                                         <button type="button" @click="selectService('OTRO')" 
-                                                                                class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-[#790fd6] hover:text-white transition-colors border-t border-gray-200 whitespace-nowrap">
-                                                                            OTRO (Especificar)
+                                                                                class="block w-full text-left px-4 py-2 text-sm font-medium text-[#8704BF] hover:bg-gradient-to-r hover:from-[#8704BF] hover:to-[#F2059F] hover:text-white transition-all duration-200 border-t-2 border-gray-200 whitespace-nowrap">
+                                                                            ✏️ OTRO (Especificar)
                                                                         </button>
                                                                     </div>
                                                                 </div>
