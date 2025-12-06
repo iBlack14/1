@@ -248,46 +248,70 @@
 
     {{-- Logic for Extra Pages based on Services --}}
     @php
-        // Mapeo antiguo como fallback
-        $concept_image_map = [
-            'WEB INFORMATIVA' => ['web-informativa.png'],
-            'WEB E-COMMERCE' => ['E-COMERCE.png'],
-            'WEB FUSION E-COMMERCE' => ['web-informativa.png', 'E-COMERCE.png'],
-            'POSICIONAMIENTO SEO' => ['posicionamiento-seo.png'],
-            'WEB AULA VIRTUAL' => ['aula-virtual.png'],
-            'WEB FUSION AULA VIRTUAL' => ['web-informativa.png', 'aula-virtual.png'],
-            'PLUGIN YOAST SEO' => ['yoast-seo.png'],
-            'RESTRUCTURACIÓN BÁSICA' => ['restructuracion.png']
-        ];
-
         $selected_images = [];
         foreach($quotation->items as $item) {
-            // DEBUG: Ver qué image_path tenemos
-            // dd(['service' => $item->service_name, 'image_path' => $item->image_path]);
-            
-            // Prioridad 1: Imagen personalizada seleccionada por el usuario
+            // Prioridad 1: Imagen personalizada seleccionada por el usuario (si existe en item)
             if(!empty($item->image_path)) {
-                $imageName = basename($item->image_path);
-                if(!in_array($imageName, $selected_images)) {
-                    $selected_images[] = $imageName;
+                // Check if it's a full URL or relative path
+                $imageName = basename($item->image_path); 
+                // We need the full local path for PDF generation
+                // If it's from storage (dynamic), path is storage/service_images/filename
+                // If it's legacy (public/images), path is just filename
+                
+                // Let's assume item->image_path stores the URL. We need to find the file.
+                // If the URL contains 'storage/service_images', it's a dynamic image.
+                if(strpos($item->image_path, 'storage/service_images') !== false) {
+                     $localPath = storage_path('app/public/service_images/' . $imageName);
+                } else {
+                     // Legacy fallback
+                     $localPath = public_path('images/' . $imageName);
                 }
-            } else {
-                // Prioridad 2: Mapeo automático por nombre de servicio
+                
+                if(!in_array($localPath, $selected_images) && file_exists($localPath)) {
+                    $selected_images[] = $localPath;
+                }
+            } 
+            
+            // Prioridad 2: Mapeo automático por nombre de servicio (BD)
+            // Buscar mapeos para este servicio
+            $mappings = \App\Models\ServiceMapping::where('service_name', $item->service_name)
+                                                  ->with('serviceImage')
+                                                  ->orderBy('order')
+                                                  ->get();
+                                                  
+            foreach($mappings as $mapping) {
+                if($mapping->serviceImage && $mapping->serviceImage->is_active) {
+                    $localPath = storage_path('app/public/service_images/' . $mapping->serviceImage->filename);
+                    if(!in_array($localPath, $selected_images) && file_exists($localPath)) {
+                        $selected_images[] = $localPath;
+                    }
+                }
+            }
+            
+            // Fallback: Si usaron un servicio antiguo que no está mapeado en BD, intentar buscar en legacy map (opcional, pero buena práctica)
+            if(empty($mappings) && empty($item->image_path)) {
+                $legacy_map = [
+                    'WEB INFORMATIVA' => 'web-informativa.png',
+                    'WEB E-COMMERCE' => 'E-COMERCE.png',
+                    'POSICIONAMIENTO SEO' => 'posicionamiento-seo.png',
+                    'WEB AULA VIRTUAL' => 'aula-virtual.png',
+                    'PLUGIN YOAST SEO' => 'yoast-seo.png',
+                    'RESTRUCTURACIÓN BÁSICA' => 'restructuracion.png'
+                ];
                 $service = strtoupper(trim($item->service_name));
-                if(isset($concept_image_map[$service])) {
-                    foreach($concept_image_map[$service] as $img) {
-                        if(!in_array($img, $selected_images)) {
-                            $selected_images[] = $img;
-                        }
+                if(isset($legacy_map[$service])) {
+                    $localPath = public_path('images/' . $legacy_map[$service]);
+                     if(!in_array($localPath, $selected_images) && file_exists($localPath)) {
+                        $selected_images[] = $localPath;
                     }
                 }
             }
         }
     @endphp
 
-    @foreach($selected_images as $image)
+    @foreach($selected_images as $imagePath)
     <div class="page page--extra">
-        <img class="page--extra__image" src="{{ public_path('images/' . $image) }}" alt="Detalle del servicio">
+        <img class="page--extra__image" src="{{ $imagePath }}" alt="Detalle del servicio">
     </div>
     @endforeach
 </body>

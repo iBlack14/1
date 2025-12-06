@@ -12,7 +12,8 @@ class QuotationController extends Controller
 {
     public function create()
     {
-        return view('quotations.create');
+        $images = \App\Models\ServiceImage::where('is_active', true)->orderBy('order')->get();
+        return view('quotations.create', compact('images'));
     }
 
     public function store(Request $request)
@@ -23,18 +24,22 @@ class QuotationController extends Controller
             'client_phone' => 'nullable|string|max:20',
             'client_email' => 'nullable|email|max:255',
             'client_address' => 'nullable|string|max:255',
-            'date' => 'required|date',
-            'items' => 'required|array|min:1',
-            'items.*.service_name' => 'required|string',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
+            'date' => 'nullable|date',
+            'items' => 'nullable|array',
+            'items.*.service_name' => 'nullable|string',
+            'items.*.quantity' => 'nullable|integer|min:1',
+            'items.*.price' => 'nullable|numeric|min:0',
             'items.*.image_path' => 'nullable|string',
             'apply_igv' => 'boolean',
         ]);
 
         $subtotal = 0;
-        foreach ($request->items as $item) {
-            $subtotal += $item['quantity'] * $item['price'];
+        if ($request->has('items') && is_array($request->items)) {
+            foreach ($request->items as $item) {
+                $quantity = $item['quantity'] ?? 1;
+                $price = $item['price'] ?? 0;
+                $subtotal += $quantity * $price;
+            }
         }
 
         $igv = $request->has('apply_igv') ? $subtotal * 0.18 : 0;
@@ -44,25 +49,29 @@ class QuotationController extends Controller
             'user_id' => Auth::id(),
             'client_name' => $validated['client_company'], // Use company name as client name
             'client_company' => $validated['client_company'],
-            'client_ruc' => $validated['client_ruc'],
-            'client_phone' => $validated['client_phone'],
-            'client_email' => $validated['client_email'],
-            'client_address' => $validated['client_address'],
-            'date' => $validated['date'],
+            'client_ruc' => $validated['client_ruc'] ?? null,
+            'client_phone' => $validated['client_phone'] ?? null,
+            'client_email' => $validated['client_email'] ?? null,
+            'client_address' => $validated['client_address'] ?? null,
+            'date' => $validated['date'] ?? now()->format('Y-m-d'),
             'subtotal' => $subtotal,
             'igv' => $igv,
             'total' => $total,
         ]);
 
-        foreach ($request->items as $item) {
-            QuotationItem::create([
-                'quotation_id' => $quotation->id,
-                'service_name' => $item['service_name'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'total' => $item['quantity'] * $item['price'],
-                'image_path' => $item['image_path'] ?? null,
-            ]);
+        if ($request->has('items') && is_array($request->items)) {
+            foreach ($request->items as $item) {
+                if (!empty($item['service_name'])) {
+                    QuotationItem::create([
+                        'quotation_id' => $quotation->id,
+                        'service_name' => $item['service_name'],
+                        'quantity' => $item['quantity'] ?? 1,
+                        'price' => $item['price'] ?? 0,
+                        'total' => ($item['quantity'] ?? 1) * ($item['price'] ?? 0),
+                        'image_path' => $item['image_path'] ?? null,
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('quotations.show', $quotation);

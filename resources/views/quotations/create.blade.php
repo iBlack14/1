@@ -27,7 +27,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2 bg-white/60 border border-[#F2059F]/15 rounded-2xl p-6 shadow-inner shadow-white/40">
                             <div>
                                 <x-input-label for="date" :value="__('Fecha')" class="text-gray-700" />
-                                <x-text-input id="date" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="date" name="date" :value="date('Y-m-d')" required />
+                                <x-text-input id="date" class="block mt-1 w-full bg-white border-gray-200 text-gray-900 focus:border-vc-magenta focus:ring-vc-magenta rounded-xl" type="date" name="date" :value="date('Y-m-d')" />
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
                             <div>
@@ -178,44 +178,20 @@
                                                                     </div>
 
                                                                     <!-- Gallery Grid -->
-                                                                    <div x-show="item.showGallery" x-transition class="grid grid-cols-3 gap-2 mt-2 max-h-64 overflow-y-auto p-2 bg-white rounded-lg">
-                                                                        <div @click="item.selectedImage = '{{ asset('images/web-informativa.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/web-informativa.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/web-informativa.png') }}" alt="Web Informativa" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">Web Informativa</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div @click="item.selectedImage = '{{ asset('images/E-COMERCE.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/E-COMERCE.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/E-COMERCE.png') }}" alt="E-Commerce" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">E-Commerce</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div @click="item.selectedImage = '{{ asset('images/aula-virtual.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/aula-virtual.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/aula-virtual.png') }}" alt="Aula Virtual" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">Aula Virtual</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div @click="item.selectedImage = '{{ asset('images/posicionamiento-seo.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/posicionamiento-seo.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/posicionamiento-seo.png') }}" alt="Posicionamiento SEO" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">Posicionamiento SEO</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div @click="item.selectedImage = '{{ asset('images/yoast-seo.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/yoast-seo.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/yoast-seo.png') }}" alt="Yoast SEO" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">Yoast SEO</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div @click="item.selectedImage = '{{ asset('images/restructuracion.png') }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ asset('images/restructuracion.png') }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
-                                                                            <img src="{{ asset('images/restructuracion.png') }}" alt="Reestructuración" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
-                                                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
-                                                                                <span class="text-white text-[10px] font-medium truncate">Reestructuración</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                     <div x-show="item.showGallery" x-transition class="grid grid-cols-3 gap-2 mt-2 max-h-64 overflow-y-auto p-2 bg-white rounded-lg">
+                                                                        @forelse($images as $image)
+                                                                         <div @click="item.selectedImage = '{{ $image->url }}'; item.showGallery = false" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 hover:border-[#F2059F] transition-all" :class="item.selectedImage === '{{ $image->url }}' ? 'border-[#8704BF] ring-2 ring-[#8704BF]' : 'border-gray-200'">
+                                                                             <img src="{{ $image->url }}" alt="{{ $image->name }}" class="w-full h-20 object-cover group-hover:scale-110 transition-transform">
+                                                                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1">
+                                                                                 <span class="text-white text-[10px] font-medium truncate">{{ $image->name }}</span>
+                                                                             </div>
+                                                                         </div>
+                                                                        @empty
+                                                                         <div class="col-span-3 text-center text-xs text-gray-500 py-4">
+                                                                             No hay imágenes disponibles. Agrega nuevas en Ajustes.
+                                                                         </div>
+                                                                        @endforelse
+                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>

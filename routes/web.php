@@ -27,6 +27,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/images', [App\Http\Controllers\SettingController::class, 'uploadImage'])->name('settings.images.upload');
+    Route::delete('/settings/images/{image}', [App\Http\Controllers\SettingController::class, 'deleteImage'])->name('settings.images.delete');
+    Route::post('/settings/mappings', [App\Http\Controllers\SettingController::class, 'updateMapping'])->name('settings.mappings.update');
+    Route::delete('/settings/mappings/{mapping}', [App\Http\Controllers\SettingController::class, 'deleteMapping'])->name('settings.mappings.delete');
     Route::get('/api/reminders', [QuotationController::class, 'getReminders'])->name('api.reminders');
 });
 
